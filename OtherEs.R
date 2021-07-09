@@ -3,9 +3,11 @@
 #######################################################################
 #######################################################################
 #### Gloria Buriticá
-#### Estimatiors for SS
+#### Simulation Study Extremal index
 #### 1. Robertetal ( Depends on a proportion k of the path )
 #### 2. Northrop
+source("/Users/Buritica/Dropbox/Thèse/git/extremal_index/Estimators.R")
+source("/Users/Buritica/Dropbox/Thèse/git/index_regular_variation/IndexofRV.R")
 #######################################################################
 #######################################################################
 #######################################################################
@@ -35,9 +37,6 @@ Index_Northrop1 <- function(path,rn){
 }
 ## Intervals Ferro et al. Estimator (u)
 # T_i := S_{i+1} - S_{i} exceedence time. There is an exceedence at time i. 
-
-
-
 re <- floor(n/max(k0))
 for(k in re:2){
   thet <- data.frame("Intervals" = 0, "Sliding" = 0, "Northrop" = 0,  
@@ -91,149 +90,8 @@ for(k in re:2){
   
   theta        <- rbind(theta, thet)
 }
-## k0 <- number of order statistics to use
-## b0 <- block length to use 
-exIndex <- function(path0,k0,alpha0=1){
-  n     <- length(path0)
-  theta <- data.frame("Intervals" = NULL, "Sliding" = NULL, "Northrop" = NULL, "runs6"=NULL, "runs7" =NULL, "blocks6"=NULL, "blocks7"=NULL,
-                      "Stable26" = NULL,"Stable27" = NULL, "Stable28" = NULL,"Stable29" = NULL, "k"=NULL )
-  anth <- sort(path0, decreasing=TRUE )
-  
-  pathrank       <- n/r(path0)
-  th6  <- anth[floor(n^0.6)]
-  th7  <- anth[floor(n^0.7)]
-  #print("ok")
-  if(min(k0) > 1){
-    re   <- floor(n/max(k0))
-    kind <- c(k0, re:2)
-    for(k in 1:length(kind)){
-      thet <- data.frame("Intervals" = 0, "Sliding" = 0, "Northrop" = 0,  "runs6"=0, "runs7" =0, "blocks6"=0, "blocks7"=0,
-                           "Stable26" = 0, "Stable27" = 0,"Stable28" = 0,"Stable29" = 0,"k"=0)
-      if( k <= length(k0)){
-          ## Parameters
-          u  <- anth[kind[k]]              ## Defines the quantile
-          Ti <- sampleInterexceeences(path0,u)  ## Interexceedence sample
-          Nn <- (kind[k])-1                           ## number of exceedences
-          bl <- floor(n/kind[k])                             ## block length
-      }
-      else{
-           ## Parameters
-          u  <- anth[floor(n/kind[k])]              ## Defines the quantile
-          Ti <- sampleInterexceeences(path0,u)  ## Interexceedence sample
-          Nn <- ((n/kind[k]))-1                     ## number of exceedences
-          bl <- kind[k]                             ## block length
-      }
-      maxsliding      <- Maxsl(path0,bl,n)
-      maxdisjoint     <- Maxdj(path0,bl,n)
-      ## Runs Estimator
-      thet$runs6   <- thet$runs6 + min(1,(sum( sapply(1:(n-bl), function(l) (path0[l]>th6)*(maxsliding[(l+1)]<=th6) ))/floor(n^0.6)))
-      thet$runs7   <- thet$runs7 + min(1,(sum( sapply(1:(n-bl), function(l) (path0[l]>th7)*(maxsliding[(l+1)]<=th7) ))/floor(n^0.7)))
-      ## Blocks estimator
-      thet$blocks6  <- thet$blocks6 + min(1, sum(maxdisjoint>th6)/floor(n^0.6))
-      thet$blocks7  <- thet$blocks7 +  min(1, sum(maxdisjoint>th7)/floor(n^0.7))
-     
-     
-     ## Intervals Estimator.
-     if(max(Ti) > 2){
-       thet$Intervals <- thet$Intervals + Interval2(Ti,Nn)   ## Intervals if Ti > 2
-     }
-     else thet$Intervals <- thet$Intervals + min(1,Interval1(Ti,Nn))   ## Intervals if Ti <= 2
-     
-     ## Sliding Estimator
-     thet$Sliding  <-  thet$Sliding  + min(1,Sliding(maxsliding,u,n,bl,Nn))      ## Sliding Robert et al.
-     
-     ## Northrop Estimator
-     #thet$Northrop  <-  thet$Northrop + North(maxsliding,path0,n,bl)           ## Northrop
-     maxslidingrank <-  Maxsl(pathrank,bl,n) #n/minR_j 
-     thet$Northrop  <-  thet$Northrop + min(1,North2(maxslidingrank,n,bl))
-     
-     ## Stable 
-     
-     sumdisjoint     <- Sumdj(path0^alpha0,bl,n)
-     maxdisjoint     <- maxdisjoint^alpha0
-     sortsum        <- sort(sumdisjoint,decreasing=TRUE); n2 <- length(sortsum)
-     thet$Stable26  <- thet$Stable26 + stable2(sumdisjoint,maxdisjoint,bl,sortsum, max(floor( (n^0.6)/bl),2) )  ## proportion 1/n^(0.5) of sample suma
-     thet$Stable27  <- thet$Stable27 + stable2(sumdisjoint,maxdisjoint,bl,sortsum, max(floor( (n^0.7)/bl),2) )  ## proportion 1/n^(0.5) of sample suma
-     thet$Stable28  <- thet$Stable28 + stable2(sumdisjoint,maxdisjoint,bl,sortsum, max(floor( (n^0.8)/bl),2) )  ## proportion 1/n^(0.5) of sample suma
-     thet$Stable29  <- thet$Stable29 + stable2(sumdisjoint,maxdisjoint,bl,sortsum, max(floor( (n^0.9)/bl),2) )  ## proportion 1/n^(0.5) of sample suma
-     
-     #sortmax       <- sort(maxdisjoint,decreasing=TRUE)
-     #thet$add  <- thet$add +  min(1, sum(maxdisjoint>sortmax[floor(n2^0.7)])/floor(n^0.7))
-    
-     thet$k     <- thet$k +bl
-     theta      <- rbind(theta, thet)
-    }
-    return(theta)
-  }
-}
+
 ##
-par(mfrow=c(2,2))
-par(mfrow=c(1,1))
-n      <-  10000; ei <- 0.5; kmax <- floor(n^0.8); kmax2 <- floor(n^0.5)
-#sample <- ARMAX1(1-ei,n,al=1) #abs(ARCHmodel(lambdaV[2,4],n)); ei <- thetaV[2,4]## ARMAX1(1-ei,n) #n/r(ARMAX1(1-ei,n))#  ARMAX1(1-ei,n)#
-sample <- abs( arima.sim(n = 5000, list(ar=0.5, ma=0), rand.gen=function(n)rt(n,df=1)) )
-par(mfrow=c(1,1))
-{
-
-alpha <- 1/alphaestimator(sample,k0=kmax, R0 = 1)$xi; print(alpha)
-th    <- exIndex(path0=sample,k0=5:kmax2,alpha0=alpha)
-## Plot
-
-plot(log(th$k),  (th[,1]), type = "p", ylim=c(0,1), col=4, 
-     pch=4, cex=0.5, xlab ="log( block length )", ylab = "Extremal Index")   ## Intervals
-lines(log(th$k), (th[,1]), col = 4, lty=4)
-for(i in 2:3){ 
-#  points( log(th$k), th[,i], col = i+3, pch=i+3, cex =0.5)   ## Sliding-Northrop
-  lines(log(th$k), th[,i], col = i+3 , lty=i+3)
-}
-for(i in 4:5){ 
-  #points( log(th$k), th[,i], col = 7, pch=i+3, cex =0.5)   ## Sliding-Northrop
-  lines(log(th$k), th[,i], col = 7 , lty=i+3)
-}
-for(i in 6:7){ 
-  #points( log(th$k), th[,i], col = 9, pch=i+3, cex =0.5)   ## Sliding-Northrop
-  lines(log(th$k), th[,i], col = 9 , lty=i+3)
-}
-for(i in 8:11){
-  lines( log(th$k), (th[,i]), col = 1, lty=i-3);#points( log(th$k), (th[,i]), col = 1, lty=i-3,cex=0.5,pch=i-3)
-}
-abline(h=0.2)
-##
-#for(i in 4:6) points( log(th$k), (th[,i]), col = 1, lty=i, pch=16, cex=0.3) ## Stable ^0.3,0.4,0.5
-
-#for(i in 7)   lines( 1:length(th[,1]), th[,i], col = i, lty=i)   ## Stable Biais
-#for(i in 8:10) lines( log(th$k), (th[,i]), col = i, lty=i)   ## Rapport + mean
-## Legend.
-abline(h = ei, col ="red")
-legend( "topright", legend = c("Intervals","Sliding", "Northrop", "LD n^0.3","LD n^0.4","LD n^0.5"), 
-        col =c(4:6, "black", "black", "black"), lty=c(4:6,1:3),pch=c(4:6,1:3),cex=1  )
-}
-############################## Additional functions.
-sampleInterexceeences <- function(path0,u){
-  Extimes    <-  which(path0 > u)     ## Finds index with exceedences
-  Interxtimes <- Extimes[2:length(Extimes)] -  Extimes[1:(length(Extimes)-1)] ## Computes the index difference
-  return(Interxtimes)
-}
-Sumdj     <- function(path0,b0,n0) sapply(1:max(1,floor(n0/b0)) , function(i) sum(path0[ ((i-1)*b0 + 1) : (i*b0) ]))
-Maxdj     <- function(path0,b0,n0) sapply(1:max(1,floor(n0/b0)) , function(i) max(path0[ ((i-1)*b0 + 1) : (i*b0) ]))
-Maxsl     <- function(path0,b0,n0) sapply(1:(n0-b0+1)    , function(i) max(path0[i:(i+b0-1)]))
-Sumsl     <- function(path0,b0,n0) sapply(1:(n0-b0+1)    , function(i) sum(path0[i:(i+b0-1)]))
-Interval1 <- function(Ti0,Nn0)  min( 1 , (2*sum(Ti0)^2)/( (Nn0-1)*sum(Ti0^2) )  )
-Interval2 <- function(Ti0,Nn0)  min( 1 , (2*sum(Ti0-1)^2)/( (Nn0-1)*sum( (Ti0-1)*(Ti0-2) ) ) )
-Sliding   <- function(Maxsl0,u,n0,b0,Nn0) -1*n0*log( mean( Maxsl0 <= u ) )/( b0*Nn0 ) 
-North     <- function(Maxsl0,path0,n0 ,b0)  1/mean( -1*b0*log( sapply(Maxsl0 , function(m)  mean(path0 <= m ) ))  )
-North2    <- function(Maxslrank0,n0 ,b0) 1/mean( -1*b0*log( sapply(Maxslrank0 , function(m)  (n0-(n0/m)+1)/n0  ) )  )
-stable2   <- function(sumdj0, maxdj0,rl0,sortsum0,k0) mean( maxdj0[sumdj0 > sortsum0[k0]]/sumdj0[sumdj0 > sortsum0[k0]] )
-r <- function(x){
-  v <- vector(length = length(x), mode = "integer")
-  y <- order(x, decreasing=TRUE)
-  for(i in 1:length(x))  v[y[i]] = i 
-  return(v)
-}
-##################################################################
-##################################################################
-##################################################################
-##################################################################
 ##################################################################
 # Simulation study
 type          <- c( "Intervals","Sliding","Northrop","Stable23","Stable24","Stable25","Stable","Stablep" ,"Stablep2","Stablep22")
