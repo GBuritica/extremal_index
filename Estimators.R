@@ -3,11 +3,26 @@
 #######################################################################
 #######################################################################
 #### Gloria Buriticá
-#### Simulation Study Extremal index
-#### 1. Robertetal ( Depends on a proportion k of the path )
-#### 2. Northrop
+#### Extremal index estimators : 
+##                   -Intervals
+##                   -Sliding
+##                   -Northrop
+##                   -Intervals
+######### Main function
+## plot_estimators plots implemented estimators
+##          run plot_estimators(th0=exIndex)     If the return of exIndex has been computed previously and you want to plot results.
+##          run plot_estimators(sample0,alpha0)  If estimators + plot needs to be computed.
+##          set ei0 = true value of the extremal index (if known).
+#########
+## exIndex returns a data.frame with all estimators as a function of k : block length.
+##                   Intervals estimator.
+##                   Sliding estimator.
+##                   Northrop estimator.
+##                   SCP: spectral cluster estimator for two tunning parameters.
+
 source("/Users/Buritica/Dropbox/Thèse/git/Auxiliar_functions/rank_transform.R")
 source("/Users/Buritica/Dropbox/Thèse/git/index_regular_variation/IndexofRV.R")
+
 #######################################################################
 #######################################################################
 #######################################################################
@@ -40,11 +55,8 @@ source("/Users/Buritica/Dropbox/Thèse/git/index_regular_variation/IndexofRV.R"
 ## alpha0 <- Index of regular variation for the SCP estimator.
 ## if runs and blocks estimator shall be consider then set runs0 and block0 to T.
 
-######### Main function
-## plot_estimators plots implemented estimators
-##          run plot_estimators(th0=exIndex)     If the return of exIndex has been computed previously and you want to plot results.
-##          run plot_estimators(sample0,alpha0)  If estimators + plot needs to be computed.
-##          set ei0 = true value of the extremal index (if known).
+#########
+## Main functions
 plot_estimators<- function(sample0=NA,alpha0=NA,ei0=0,k0=5:floor(n^0.5),runs0=FALSE,blocks0=FALSE,th0=NA){
   if(is.na(th0)) th    <-  exIndex(path0=sample0,k0,alpha0=alpha0)
   else           th    <-  th0
@@ -75,12 +87,7 @@ plot_estimators<- function(sample0=NA,alpha0=NA,ei0=0,k0=5:floor(n^0.5),runs0=FA
        labels = rev(th$k)[seq(1,length(th$k), 10)] )
   return(th)
 }
-## exIndex returns a data.frame with all estimators as a function of k : block length.
-##                   Intervals estimator.
-##                   Sliding estimator.
-##                   Northrop estimator.
-##                   SCP: spectral cluster estimator for two tunning parameters.
-exIndex <- function(path0,k0=5:floor(n^0.5),alpha0=1,runs0=F,blocks0=F){
+exIndex        <- function(path0,k0=5:floor(n^0.5),alpha0=1,runs0=F,blocks0=F){
   n     <- length(path0)
   theta <- data.frame("Intervals" = NULL, "Sliding" = NULL, "Northrop" = NULL, "runs6"=NULL, "runs7" =NULL, "blocks6"=NULL, "blocks7"=NULL,
                       "Stable2" = NULL,"Stable3" = NULL, "k"=NULL )
