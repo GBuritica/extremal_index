@@ -584,9 +584,16 @@ grid.arrange(g4,g44,ncol = 2, nrow=1)
 
 ##
 grid.arrange(g1,g2,g3,g4, ncol = 2, nrow=2)
-
-#1F3552"
-addingtitle <- function(gg,title,title2=" "){
+#################################################################################
+## Additional functions : random paths
+ARCHm <- function(n){
+  x0  <- 1
+  for(i in 1:(2*n) ) x0  <- c(x0, ( exp(rnorm(1) - 0.5)*(x0[length(x0)]) + 1 ) )
+  return(x0[(n+1):(2*n)])
+}
+#################################################################################
+## Additional functions : plots
+addingtitle   <- function(gg,title,title2=" "){
   gg <- gg +
          geom_hline(yintercept=thet,lty=2, col="blue") +
          scale_y_continuous(name =title2 , labels = c(0,thet,1), breaks = c(0,thet,1), limits=c(0,1))+ 
@@ -607,7 +614,7 @@ addingtitle <- function(gg,title,title2=" "){
     
   return(gg)
 } 
-addingtitles <- function(gg,title,title2=" "){
+addingtitles  <- function(gg,title,title2=" "){
   gg <- gg +
     geom_hline(yintercept=thet,lty=2, col="blue") +
     scale_y_continuous(name =" " , labels = c(0,thet,1), breaks = c(0,thet,1), limits=c(0,1))+ 
@@ -651,29 +658,8 @@ addingtitlebl <- function(gg,title){
   
   return(gg)
 }  
-
 ## B_t = 1
 
-ARCHm <- function(n){
-  x0  <- 1
-  for(i in 1:(2*n) ) x0  <- c(x0, ( exp(rnorm(1) - 0.5)*(x0[length(x0)]) + 1 ) )
-  return(x0[(n+1):(2*n)])
-  
-}
 
-
-spec1 <- ugarchspec(mean.model = list(armaOrder = c(0,0), include.mean = FALSE),
-                    variance.model = list(model="GARCH",garchOrder = c(1, 0)),
-                    fixed.pars = list("omega" = 0, "alpha1" = 1,
-                                      "beta1" = 0),
-                    distribution.model ='rnorm' )
-# simulate the path
-path.sgarch <- ugarchpath(spec1, n.sim=3000, n.start=1)
-garch.sim(alpha=c(0.5,0.5), beta=1, n = 500, rnd = rnorm , ntrans=100)
-
-fgspec <- garchSpec(model=list(alpha=0.999, 
-                               omega=.01, beta=0.0001))
-fgsim <-  garchSim(spec=fgspec, extended=TRUE, n=200)
-plot.ts(fgsim@.Data[,1])
 
 
