@@ -99,8 +99,9 @@ load("sim2904AR0.22NEW.Rdata")
 
 ##############################################################
 ## Create plot
-thet <- 0.2792
 thet <- 0.2
+thet <- 0.2792
+thet <- 0.8
 {
   g1 <- ggplot(data=infothetSS[ (infothetSS$k%in%c(2,4,8,16,32,64,128,250,500)) , ], aes(y=(Intervals), x=as.factor(k))) + geom_boxplot(fill = "#4271AE", colour = "skyblue4", alpha = 0.4,outlier.colour = "#1F3552", outlier.shape = 16, outlier.size = 0.5)
   g2 <- ggplot(data=infothetSS[ (infothetSS$k%in%c(2,4,8,16,32,64,128,250,500)) , ], aes(y=(Sliding),   x=as.factor(k)))  + geom_boxplot(fill = "#4271AE", colour = "skyblue4", alpha = 0.4,outlier.colour = "#1F3552",outlier.shape = 16, outlier.size = 0.5)
