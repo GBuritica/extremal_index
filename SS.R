@@ -14,10 +14,10 @@ require(ggplot2)
 require(gridExtra)
 require(latex2exp)
 ###################################################################
-type          <- c( "Intervals","Sliding","Northrop","runs6","runs7","blocks6","blocks7","Stable26","Stable27" )
-infothetSS    <-  data.frame(  "Intervals"=NULL,"Sliding"=NULL,"Northrop"=NULL,"runs6"=NULL,"runs7"=NULL,
-                               "blocks6"=NULL,"blocks7"=NULL,"Stable26"=NULL,"Stable27"=NULL,"Stable28"=NULL,"Stable29"=NULL, ## Estimators
-                               "k"=NULL, "thet" = NULL, "alpha" = NULL,"N" = NULL, "id" = NULL)
+#type          <- c( "Intervals","Sliding","Northrop","runs6","runs7","blocks6","blocks7","Stable26","Stable27" )
+#infothetSS    <-  data.frame(  "Intervals"=NULL,"Sliding"=NULL,"Northrop"=NULL,"runs6"=NULL,"runs7"=NULL,
+#                               "blocks6"=NULL,"blocks7"=NULL,"Stable26"=NULL,"Stable27"=NULL,"Stable28"=NULL,"Stable29"=NULL, ## Estimators
+#                               "k"=NULL, "thet" = NULL, "alpha" = NULL,"N" = NULL, "id" = NULL)
 ##################################################################
 ## AR(1)
 {
@@ -37,12 +37,6 @@ infothetSS    <-  data.frame(  "Intervals"=NULL,"Sliding"=NULL,"Northrop"=NULL,"
     
   }
   head(infothetSS)
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAX0.2")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAX0.6")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAX0.4")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAXRank0.2")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAXRank0.6")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAXRank0.4")
 } #612
 load("sim2804AR0.82.Rdata") ## n,N,infothetSS
 ## ARCH(1)
@@ -62,12 +56,6 @@ load("sim2804AR0.82.Rdata") ## n,N,infothetSS
     print(N)
   }
   head(infothetSS)
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAX0.2")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAX0.6")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAX0.4")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAXRank0.2")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAXRank0.6")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAXRank0.4")
 } #957
 load("sim2904ARCH.Rdata")
 ## AR(1) - 0.2
@@ -88,12 +76,6 @@ load("sim2904ARCH.Rdata")
     
   }
   tail(infothetSS)
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAX0.2")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAX0.6")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAX0.4")
-  #load("/Users/Buritica/Dropbox/Thèse/0/Projet_EI/SS/SSData/sim0904ARMAXRank0.2")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAXRank0.6")
-  #load(infothetSS,n,ei,kmax,kmax2,id,theta,file = "sim0904ARMAXRank0.4")
 } #
 load("sim2904AR0.22NEW.Rdata")
 
