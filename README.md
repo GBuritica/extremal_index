@@ -18,4 +18,3 @@ Comments:
             set ei0 = true value of the extremal index (if known).
 
 
-/Users/Buritica/Desktop/AR.jpeg
