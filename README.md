@@ -17,5 +17,5 @@ Comments:
      run: plot_estimators(sample0,alpha0)  If estimators + plot needs to be computed.
             set ei0 = true value of the extremal index (if known).
 
-
-/Users/Buritica/Desktop/AR.jpeg
+See: Buriticá, G., Meyer, N., Mikosch, T. and Wintenberger, O. (2021) 
+Some variations on the extremal index. *Zapiski Nauchn. Seminarov POMI*, to appear.
