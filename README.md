@@ -1,13 +1,18 @@
 # extremal_index
+
+This script reproduces the experiments from the article:
+Buriticá, G., Meyer, N., Mikosch, T. and Wintenberger, O. (2021) Some variations on the extremal index. Zapiski Nauchn. Seminarov POMI, to appear.
+
 ### Extremal index estimators: 
+We consider the following estimators for the extremal index
     -Intervals
     -Sliding
     -Northrop
     -runs   : n^.*            
     -blocks : n^.*   
     -stable : n^.*/bl      , * in {0.6,0.7}
-    
-Main function: 
+
+To run the experiments we use the following ,ain function: 
     -plot_estimators(  )  : plots implemented estimators)
     -exIndex(  )              : returns a data.frame with all estimators as a function of k (block length)
         plot_estimators  plots implemented estimators
